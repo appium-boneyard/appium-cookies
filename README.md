@@ -1,2 +1,2 @@
-appium-cookies
+# appium-cookies
 Simple cookie handling
