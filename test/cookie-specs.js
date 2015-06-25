@@ -11,8 +11,6 @@ chai.use(chaiAsPromised);
 chai.expect();
 let expect = chai.expect;
 
-
-//readCookies
 describe('cookies.js', () => {
   it('should properly create a JS cookie', () => {
     let  cf = new cookieFunctions();
@@ -80,6 +78,7 @@ describe('cookies.js', () => {
   });
   
 });
+
 
 
 
