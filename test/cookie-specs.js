@@ -1,76 +1,67 @@
 // transpile:mocha
 
-import Cookie from '../lib/cookie.js';
+import { createJSCookie, createJWPCookie, getValue, expireCookie } from '../lib/cookie.js';
 import chai from 'chai';
-import chaiAsPromised from 'chai-as-promised';
 import 'mochawait';
 
 
 chai.should();
-chai.use(chaiAsPromised);
 chai.expect();
 let expect = chai.expect;
 
-describe ('cookies.js', () => { 
-  it ('should properly read a cookie and return the value given the key', () => {
-    let cookieMan = new Cookie('k=v');
-    cookieMan.readCookie('k').should.equal('v');
+describe ('cookies.js', () => {
+  it('should properly create a JS cookie', () => {
+    let jsCookie = createJSCookie('k', 'v');
+    jsCookie.should.equal('k=v');
   });
 
-
-  it ('should return undefined for an undefined key value', () => {
-    let cookieMan = new Cookie('k=v');
-    expect(cookieMan.readCookie('someKey')).to.be.undefined;
+  it('should create JS cookie with options given', () => { 
+    let jsCookie = createJSCookie('k', 'v', {expires: 'Thu, 01 Jan 2070 3:4:7 GMT', path: '/lib'});
+    jsCookie.should.equal('k=v; expires=Thu, 01 Jan 2070 3:4:7 GMT; path=/lib');
   });
 
-
-  it ('should properly decode an encoded key value pair',  () => {
-    let cookieMan = new Cookie(encodeURIComponent(' c') + '=' + encodeURIComponent(' v'));
-    cookieMan.readCookie(' c').should.equal(' v');
+  it('should create JSON cookie object with options given', () => {
+    let jsCookie = createJWPCookie('k', 'k=v; expires=Thu, 01 Jan 2070 3:4:7 GMT; path=/lib');
+    expect(jsCookie).to.deep.equal({name: 'k', value: 'v', expires: 'Thu, 01 Jan 2070 3:4:7 GMT', path: '/lib'});
   });
 
-
-  it ('should decode pluses in the cookie to spaces', () => {
-    let cookieMan = new Cookie('c=foo+bar');
-    cookieMan.readCookie('c').should.equal('foo bar');
+  it('should return correct value given key', () => { 
+    let value = getValue('k', 'k=v; expires=Thu, 01 Jan 2070 3:4:7 GMT; path=/lib');
+    value.should.equal('v');
   });
 
-
-  it ('should return undefined and not throw an exception on an invalid URL encoding', () => { 
-    let cookieMan = new Cookie('bad=foo%');
-    expect(cookieMan.readCookie('bad')).to.be.undefined;
+  it('should properly decode an encoded key value pair', () => {
+    let value =getValue(' c', encodeURIComponent(' c') + '=' + encodeURIComponent(' v'));
+    value.should.equal(' v');
   });
 
-  it ('should return empty object when it is called to read all and there are no cookies', () => {
-    let cookieMan = new Cookie();
-    cookieMan.readCookie().should.deep.equal({});
+  it('should return undefined for an undefined key value', () => {
+    let value = getValue('someKey', 'k=v');
+    expect(value).to.be.undefined;
   });
 
-  it ('should return written cookie string when writeCookie is called', () => {
-    let cookieMan = new Cookie();
-    cookieMan.writeCookie('c', 'v').should.equal('c=v');
+  it('should decode pluses in the cookie into spaces', () => {
+    let value = getValue('c', 'c=foo+bar');
+    value.should.equal('foo bar');
   });
 
-  it ('should convert read value when a converter is supplied to readCookie', () => {
-    let cookieMan = new Cookie('c='+ 1);
-    cookieMan.readCookie('c', Number).should.equal(1);
+  it('should return undefined and not throw an exception on an invalid URL encoding', () => {
+    let value = getValue('bad', 'bad=foo%');
+    expect(value).to.be.undefined;
   });
 
-  it ('should not alter options object when removing a cookie', () => {
-    let options = { path: '/' };
-    let cookieMan = new Cookie();
-    cookieMan.writeCookie('c', 'v', options);
-    cookieMan.removeCookie('c', options);
-    options.should.deep.equal({path: '/'});
+  it('should create empty object when it is called and there is an empty string', () => {   
+    createJWPCookie().should.deep.equal({});
   });
 
-  it ('should return a cookie that expires on 01 Jan 1970 when removeCookie is called', () => {
-    new Cookie().removeCookie('c').should.include('expires=Thu, 01 Jan 1970 00:00:00 GMT');
+  it('should properly convert the value when a converter is supplied', () => {  
+    let val = getValue('c', 'c=' + 1, Number);
+    val.should.equal(1);
   });
 
-  it ('should return proper options when writeCookie is supplied with options', () => {
-    new Cookie()
-      .writeCookie('key', 'val', {expires: 'Thu, 01 Jan 2070 3:4:7 GMT', path: '/lib'})
-      .should.equal('key=val; expires=Thu, 01 Jan 2070 3:4:7 GMT; path=/lib');
+  it('should return a cookie that expires on 01 Jan 1970 when removeCookie is called', () => {  
+     expireCookie('c').should.include('expires=Thu, 01 Jan 1970 00:00:00 GMT');
   });
+  
 });
+
