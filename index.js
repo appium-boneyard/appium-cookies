@@ -1,6 +1,6 @@
+// transpile:main
 
-import { default as cookie } from './lib/cookie.js';
+import { createJSCookie, createJWPCookie, getValue, expireCookie } from './lib/cookie.js';
 
-
-export default cookie;
+export default { createJSCookie, createJWPCookie, getValue, expireCookie };
 
