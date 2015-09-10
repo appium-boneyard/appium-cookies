@@ -2,7 +2,6 @@
 
 import cookie from '..';
 import chai from 'chai';
-import 'mochawait';
 
 
 chai.should();
