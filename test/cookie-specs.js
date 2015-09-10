@@ -29,6 +29,21 @@ describe ('cookies.js', () => {
     value.should.equal('v');
   });
 
+  it('should parse each element of string into an object', () => {
+    let value = cookie.getValue(undefined, 'k=v; expires=Thu, 01 Jan 2070 3:4:7 GMT; path=/lib');
+    value.should.eql({k: 'v', expires: 'Thu, 01 Jan 2070 3:4:7 GMT', path: '/lib'});
+  });
+
+  it('should handle quoted cookie', () => {
+    let value = cookie.getValue('k', 'k="v"; expires=Thu, 01 Jan 2070 3:4:7 GMT; path=/lib');
+    value.should.equal('v');
+  });
+
+  it('should handle quoted cookie with internal quotes', () => {
+    let value = cookie.getValue('k', 'k="v\"t\""; expires=Thu, 01 Jan 2070 3:4:7 GMT; path=/lib');
+    value.should.equal('v"t"');
+  });
+
   it('should properly decode an encoded key value pair', () => {
     let value = cookie.getValue(' c', encodeURIComponent(' c') + '=' + encodeURIComponent(' v'));
     value.should.equal(' v');
