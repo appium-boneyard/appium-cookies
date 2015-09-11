@@ -8,7 +8,33 @@
 [![Build Status](https://api.travis-ci.org/appium/appium-cookies.png?branch=master)](https://travis-ci.org/appium/appium-cookies)
 [![Coverage Status](https://img.shields.io/coveralls/appium/appium-cookies/master.svg)](https://coveralls.io/github/appium/appium-cookies?branch=master)
 
-This is a module for simple handling of cookies, for use in communicating and translating between [JSON Wire Protocol cookie objects](https://code.google.com/p/selenium/wiki/JsonWireProtocol#Cookie_JSON_Object) and regular [JavaScript cookies](https://developer.mozilla.org/en-US/docs/Web/API/Document/cookie).
+This is an ES6 module for simple handling of cookies, for use in communicating and translating between [JSON Wire Protocol cookie objects](https://code.google.com/p/selenium/wiki/JsonWireProtocol#Cookie_JSON_Object) and regular [JavaScript cookies](https://developer.mozilla.org/en-US/docs/Web/API/Document/cookie).
+
+### Usage
+
+Install from [npm](https://www.npmjs.com/package/appium-cookies):
+
+```shell
+npm install appium-cookies
+```
+
+Import/require:
+
+```js
+// ES6
+import cookie from 'appium-cookies';
+
+let c = cookie.createJSCookie('key', 'value', {expires: 'Thu, 01 Jan 2070 3:4:7 GMT', path: '/lib'});
+// c => 'key=value; expires=Thu, 01 Jan 2070 3:4:7 GMT; path=/lib'
+```
+
+```js
+// ES5
+var cookie = require('appium-cookies');
+
+var c = cookie.createJSCookie('key', 'value', {expires: 'Thu, 01 Jan 2070 3:4:7 GMT', path: '/lib'});
+// c => 'key=value; expires=Thu, 01 Jan 2070 3:4:7 GMT; path=/lib'
+```
 
 ### API
 
