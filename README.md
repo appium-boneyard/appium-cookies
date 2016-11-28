@@ -10,6 +10,8 @@
 
 This is an ES6 module for simple handling of cookies, for use in communicating and translating between [JSON Wire Protocol cookie objects](https://code.google.com/p/selenium/wiki/JsonWireProtocol#Cookie_JSON_Object) and regular [JavaScript cookies](https://developer.mozilla.org/en-US/docs/Web/API/Document/cookie).
 
+Issues for this repo are disabled. Log any issues at the [main Appium repo's issue tracker](https://github.com/appium/appium/issues).
+
 ### Usage
 
 Install from [npm](https://www.npmjs.com/package/appium-cookies):
